@@ -1,0 +1,54 @@
+演習01-01-03
+演習01-01-01で利用したgreatestsテーブルに対して普通にselect key from greatests order by key;
+というクエリを実行するとkey列をアルファベット順にソートした形で表示される
+その結果をBACDの順番で並び替えるクエリを考える
+作成日：6月19日
+作成者：成田修之
+
+
+select case key when 'A' then 'B'
+		when 'B' then 'A'
+		when 'C' then 'D'
+		else 'C' end
+from greatests
+order by key
+;
+ case
+------
+ B
+ A
+ D
+ C
+
+
+
+select  key
+from greatests
+order by
+	case
+	when key = 'B' then 1
+	when key = 'A' then 2
+	when key = 'D' then 3
+	else 4 end
+;
+
+ key
+-----
+ B
+ A
+ D
+ C
+ソートするための列をCASE式で作るイメージで作る
+order by文はselect文の後に実行されるため、
+select key,
+	case key
+	when 'B' then 1
+	when 'A' then 2
+	when 'D' then 3
+	when 'C' then 4
+	else NULL end AS sort
+from greatests
+order by
+	sort
+;
+のsortの使い方ように集計関数でのGROUP BY句ではあまり推奨されなかった書き方が可能 
