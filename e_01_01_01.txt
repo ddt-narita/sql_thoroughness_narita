@@ -1,0 +1,56 @@
+演習01-01-01
+複数列の最大値を求める。
+作成日：6月19日
+作成者：成田修之
+
+
+ key | x | y | z
+-----+---+---+---
+ A   | 1 | 2 | 3
+ B   | 5 | 5 | 2
+ C   | 4 | 7 | 1
+ D   | 3 | 3 | 8
+
+
+xとyの最大値を求める
+select 
+	key,
+	case 
+	when x > y then x
+	else y end
+from greatests;
+
+x、y、zの最大値を求める
+select 
+	key,
+	case
+	when x > y then case
+			when x > z then x
+			else z end
+	else case 
+		when y > z then y
+		else z end
+	end
+from greatests;
+		
+ key | z
+-----+---
+ A   | 3
+ B   | 5
+ C   | 7
+ D   | 8
+
+
+解説を読んで改訂
+select
+	key,
+	case 	when 
+		case when x < y then y else x end
+		< z then z 
+		//上ではzの時という風になっているのでz以外の時についてのみ記述
+		else 
+		case when x < y then y else x end
+	end AS greatests
+from 
+	greatests
+;
