@@ -1,0 +1,51 @@
+演習01-01-02
+行持ちから列もちへの水平展開の練習
+作成日：6月19日
+作成者：成田修之
+
+popTbl2
+ pref_name | sex | population
+-----------+-----+------------
+ 徳島      | 1   |         60
+ 徳島      | 2   |         40
+ 香川      | 1   |        100
+ 香川      | 2   |        100
+ 愛媛      | 1   |        100
+ 愛媛      | 2   |         50
+ 高知      | 1   |        100
+ 高知      | 2   |        100
+ 福岡      | 1   |        100
+ 福岡      | 2   |        200
+ 佐賀      | 1   |         20
+ 佐賀      | 2   |         80
+ 長崎      | 1   |        125
+ 長崎      | 2   |        125
+ 東京      | 1   |        250
+ 東京      | 2   |        150
+
+
+select 
+	case sex when '1' then '男'
+		 else '女' end AS 性別,
+	SUM(population),
+	SUM(case pref_name when '徳島' then population else 0 end) AS 徳島,
+	SUM(case pref_name when '香川' then population else 0 end) AS 香川,
+	SUM(case pref_name when '愛媛' then population else 0 end) AS 愛媛,
+	SUM(case pref_name when '高知' then population else 0 end) AS 高知,
+	
+	SUM(case pref_name 	when '香川' then population
+				when '徳島' then population
+				when '愛媛' then population
+				when '高知' then population
+				else 0 end ) AS 四国（再掲）
+from 
+	poptbl2
+group by 
+	sex
+;
+
+ 性別 | sum | 徳島 | 香川 | 愛媛 | 高知 | 四国（再掲）
+------+-----+------+------+------+------+--------------
+ 女   | 845 |   40 |  100 |   50 |  100 |          290
+ 男   | 855 |   60 |  100 |  100 |  100 |          360
+
