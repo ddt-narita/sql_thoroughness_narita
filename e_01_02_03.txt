@@ -1,0 +1,68 @@
+演習01-02-03
+順位列がすでにある状態でこの列に順位を入力する
+作成日：6月20日
+作成者：成田修之
+
+create table districtProducts2
+(
+district char(3),
+name char(6),
+price int,
+ranking int default NULL,
+primary key(district, name)
+)
+
+INSERT INTO districtProducts2 VALUES('東北','みかん',100);
+INSERT INTO districtProducts2 VALUES('東北','りんご',50);
+INSERT INTO districtProducts2 VALUES('東北','ぶどう',50);
+INSERT INTO districtProducts2 VALUES('東北','レモン',30);
+
+INSERT INTO districtProducts2 VALUES('関東','レモン',100);
+INSERT INTO districtProducts2 VALUES('関東','パイン',100);
+INSERT INTO districtProducts2 VALUES('関東','りんご',100);
+INSERT INTO districtProducts2 VALUES('関東','ぶどう',70);
+
+INSERT INTO districtProducts2 VALUES('関西','レモン',70);
+INSERT INTO districtProducts2 VALUES('関西','スイカ',30);
+INSERT INTO districtProducts2 VALUES('関西','りんご',20);
+
+update districtProducts2 p1
+set ranking = null;
+
+自己結合
+update districtProducts2 p1
+set ranking
+= (select count(name)
+	from districtProducts2 p2
+	where p1.district = p2.district
+	and p1.price < p2.price
+  ) + 1
+;
+
+OLAP関数
+update districtProducts2 
+set ranking
+= ( select ranking
+    from (select district, name ,
+	rank() over(partition by district order by price desc) AS ranking
+	from districtProducts2 AS p2) AS p1
+    where
+	p1.district = districtProducts2.district
+	and
+	p1.name = districtProducts2.name
+  )
+;
+
+ district |   name    | price | ranking
+----------+-----------+-------+---------
+ 東北     | みかん    |   100 |       1
+ 東北     | りんご    |    50 |       2
+ 東北     | ぶどう    |    50 |       2
+ 東北     | レモン    |    30 |       4
+ 関東     | レモン    |   100 |       1
+ 関東     | パイン    |   100 |       1
+ 関東     | りんご    |   100 |       1
+ 関東     | ぶどう    |    70 |       4
+ 関西     | レモン    |    70 |       1
+ 関西     | スイカ    |    30 |       2
+ 関西     | りんご    |    20 |       3
