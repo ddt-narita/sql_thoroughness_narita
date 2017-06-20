@@ -1,0 +1,88 @@
+演習01-02-02
+地域列を加えたテーブルから地域ごとにランキングを求める
+作成日：6月20日
+作成者：成田修之
+
+create table districtProducts
+(
+district char(3),
+name char(6),
+price int,
+primary key(district, name)
+)
+
+INSERT INTO districtProducts VALUES('東北','みかん',100);
+INSERT INTO districtProducts VALUES('東北','りんご',50);
+INSERT INTO districtProducts VALUES('東北','ぶどう',50);
+INSERT INTO districtProducts VALUES('東北','レモン',30);
+
+INSERT INTO districtProducts VALUES('関東','レモン',100);
+INSERT INTO districtProducts VALUES('関東','パイン',100);
+INSERT INTO districtProducts VALUES('関東','りんご',100);
+INSERT INTO districtProducts VALUES('関東','ぶどう',70);
+
+INSERT INTO districtProducts VALUES('関西','レモン',70);
+INSERT INTO districtProducts VALUES('関西','スイカ',30);
+INSERT INTO districtProducts VALUES('関西','りんご',20);
+
+ district |   name    | price
+----------+-----------+-------
+ 東北     | みかん    |   100
+ 東北     | りんご    |    50
+ 東北     | ぶどう    |    50
+ 東北     | レモン    |    30
+ 関東     | レモン    |   100
+ 関東     | パイン    |   100
+ 関東     | りんご    |   100
+ 関東     | ぶどう    |    70
+ 関西     | レモン    |    70
+ 関西     | スイカ    |    30
+ 関西     | りんご    |    20
+
+
+OLAP関数ver.
+select district, name, price,
+RANK()OVER (partition by district order by price desc) AS rank_1
+from districtProducts
+;
+
+自己結合ver.
+select p1.district, p1.name,
+Max(p1.price) price,
+count(p2.name) + 1 rank
+from districtProducts p1
+left join districtProducts p2
+on p1.district = p2.district
+and p1.price < p2.price
+group by p1.district,p1.name
+order by district, rank
+;
+
+スカラサブクエリver.
+select p1.district, p1.name,
+p1.price,
+(
+select
+count(p2.name)
+from districtProducts p2
+where p2.district = p1.district
+and p2.price > p1.price
+) + 1 as rank
+from districtProducts p1
+;
+
+
+ district |   name    | price | rank_1
+----------+-----------+-------+--------
+ 関西     | レモン    |    70 |      1
+ 関西     | スイカ    |    30 |      2
+ 関西     | りんご    |    20 |      3
+ 関東     | パイン    |   100 |      1
+ 関東     | レモン    |   100 |      1
+ 関東     | りんご    |   100 |      1
+ 関東     | ぶどう    |    70 |      4
+ 東北     | みかん    |   100 |      1
+ 東北     | りんご    |    50 |      2
+ 東北     | ぶどう    |    50 |      2
+ 東北     | レモン    |    30 |      4
+
