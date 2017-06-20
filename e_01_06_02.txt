@@ -1,0 +1,19 @@
+演習01-06-02
+機関の重複を調べるためのOVERLAPSという術語を使ってクエリを書き換えて結果を確認する。
+作成日：6月20日
+作成者：成田修之
+
+select reserver, start_date, end_date
+  from reservations r1
+ where exists
+	(select * 
+	  from reservations r2
+	 where r1.reserver <> r2.reserver
+	and ( (r1.start_date,r1.end_date) overlaps (r2.start_date, r2.end_date))
+	)
+;
+
+ reserver | start_date |  end_date
+----------+------------+------------
+ 山本     | 2006-11-03 | 2006-11-04
+ 内田     | 2006-11-03 | 2006-11-05
