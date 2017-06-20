@@ -1,0 +1,26 @@
+演習01-06-01
+前年のとの比較結果を一覧表示するクエリをサブクエリを3回実行している部分を1つにまとめる工夫をする
+作成日：6月20日
+作成者：成田修之
+
+ビューを作って行おうとしたが解説を読んで
+select s1.year, s1.sale,
+	case sign(sale - (select sale from sales_sql s2 where s2.year = s1.year - 1))
+	when 0 then '→' --横ばい
+	when 1 then '↑' --成長
+	when -1 then '↓' --後退
+	else '-' end as var 
+from sales_sql s1
+order by year
+;
+
+ year | sale | var
+------+------+-----
+ 1990 |   50 | -
+ 1991 |   51 | ↑
+ 1992 |   52 | ↑
+ 1993 |   52 | →
+ 1994 |   50 | ↓
+ 1995 |   50 | →
+ 1996 |   49 | ↓
+ 1997 |   55 | ↑
