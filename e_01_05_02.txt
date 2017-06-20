@@ -1,0 +1,26 @@
+演習01-05-02
+一人の社員が何人の子供を扶養しているか社員単位で集約する
+作成日：6月20日
+作成者：成田修之
+
+ employee | child_1 | child_2 | child_3
+----------+---------+---------+---------
+ 赤井     | 一郎    | 二郎    | 三郎
+ 工藤     | 春子    | 夏子    |
+ 鈴木     | 夏子    |         |
+ 吉田     |         |         |
+
+select EMP.employee, count(children.child)
+from personnel emp
+left outer join children
+on children.child in(emp.child_1, emp.child_2, emp.child_3)
+group by emp.employee
+;
+
+
+ employee | count
+----------+-------
+ 工藤     |     2
+ 赤井     |     3
+ 鈴木     |     1
+ 吉田     |     0
