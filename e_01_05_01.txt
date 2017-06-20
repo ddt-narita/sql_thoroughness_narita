@@ -1,0 +1,53 @@
+‰‰K01-05-01
+ƒNƒƒX•\‚Å“ü‚êq‚Ì•\‘¤‚ğì‚é‚±‚Æ‚ğ’†ŠÔƒrƒ…[‚ğ‚È‚é‚×‚­Œ¸‚ç‚·‚æ‚¤‚ÉƒR[ƒh‚ğ‰ü—Ç‚·‚é
+ì¬“úF6Œ20“ú
+ì¬ÒF¬“cC”V
+
+ age_class | age_range
+-----------+-----------
+ 1         | 21`30Î
+ 2         | 31`40Î
+ 3         | 41`50Î
+
+ sex_cd | sex
+--------+-----
+ m      | ’j
+ f      | —
+
+ pref_name | age_class | sex_cd | population
+-----------+-----------+--------+------------
+ H“c      | 1         | m      |        400
+ H“c      | 3         | m      |       1000
+ H“c      | 1         | f      |        800
+ H“c      | 3         | f      |       1000
+ ÂX      | 1         | m      |        700
+ ÂX      | 1         | f      |        500
+ ÂX      | 3         | f      |        800
+ “Œ‹      | 1         | m      |        900
+ “Œ‹      | 1         | f      |       1500
+ “Œ‹      | 3         | f      |       1200
+ ç—t      | 1         | m      |        900
+ ç—t      | 1         | f      |       1000
+ ç—t      | 3         | f      |        900
+
+
+select  master.age_class,
+	master.sex_cd,
+	SUM(case when pref_name in ('ÂX','H“c') then population else NULL end) as “Œ–k,
+	SUM(case when pref_name in ('“Œ‹','ç—t') then population else NULL end) as ŠÖ“Œ
+   from (select age_class, sex_cd from tblage cross join tblsex) as master
+	left outer join tblpop as tp
+     on master.age_class = tp.age_class
+    and master.sex_cd = tp.sex_cd
+group by master.age_class,master.sex_cd
+order by master.age_class ,master.sex_cd asc
+;
+
+ age_class | sex_cd | “Œ–k | ŠÖ“Œ
+-----------+--------+------+------
+ 1         | f      | 1300 | 2500
+ 1         | m      | 1100 | 1800
+ 2         | f      |      |
+ 2         | m      |      |
+ 3         | f      | 1800 | 2100
+ 3         | m      | 1000 |
