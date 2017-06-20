@@ -1,0 +1,25 @@
+演習01-04-03
+関係除算のクエリを全店舗について結果を一覧表示するように変更
+作成日：6月20日
+作成者：成田修之
+
+select si.shop, count(si.item), 3 - count(i.item)
+from shopitems si, items i
+where si.item = i.item
+group by si.shop
+;
+
+ shop | my_item_cnt | diff_cnt
+------+-------------+----------
+ 東京 |           3 |        0
+ 仙台 |           3 |        0
+ 大阪 |           2 |        1
+
+解説を読んで
+select si.shop,
+	count(si.item) as my_item_cnt,
+	(select count(item) from items) - count(si.item) as diff_cnt
+from shopitems si, items i
+where si.item = i.item
+group by si.shop
+;
