@@ -1,0 +1,33 @@
+演習01-05-03
+MERGE分について練習
+作成日：6月20日
+作成者：成田修之
+
+MERGE INTO Class_A A
+	USING (SELECT * FROM Class_B) B
+	ON (A.id = B.id)
+
+	WHEN MATCHED THEN
+		UPDATE SET A.name = B.name
+
+	WHEN NOT MATCHED THEN
+		INSERT (id, name)
+		VALUES (B.id, B.name) 
+;
+
+class_a
+ id |  name
+----+--------
+ 1  | 田中
+ 2  | 鈴木
+ 3  | 伊集院
+
+class_b
+ id |  name
+----+--------
+ 1  | 田中
+ 4  | 西園寺
+ 2  | 内海
+
+マージ後class_a
+リファレンスで確認したところpostgreSQLではMERGE文は対応してなかったです。
