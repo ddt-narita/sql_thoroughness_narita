@@ -1,0 +1,16 @@
+演習01-04-02
+Studentsテーブルから「全員が9月中に提出済みの学部」を選択するSQLを考える
+作成日：6月20日
+作成者：成田修之
+
+select dpt
+from Students
+group by dpt
+having count(*) = sum(case when sbmt_date between '2005-09-01' and '2005-09-30' then 1
+				else 0 end)
+;
+
+   dpt
+----------
+ 経済学部
+(1 行)
