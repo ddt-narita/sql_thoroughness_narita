@@ -1,0 +1,25 @@
+演習01-10-01
+複数のキーについて重複を調べる
+作成日：6月21日
+作成者：成田修之
+
+select center
+from materials2
+group by center,material
+having count(distinct orgland) <> count(orgland)
+;
+ center
+--------
+ 東京
+
+解説ではgroup byでまとめるのはcenter一つにしてcount内でmaterialとorglandを一つにして求めていた
+
+select center
+from materials2
+group by center
+having count(distinct material || orgland) <> count(material || orgland)
+;
+
+ center
+--------
+ 東京
