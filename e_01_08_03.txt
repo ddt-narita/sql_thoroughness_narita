@@ -1,0 +1,18 @@
+‰‰K01-08-03
+100ˆÈ‰º‚Ì”’lƒe[ƒuƒ‹‚©‚ç100ˆÈ‰º‚Ì‘f”‚ð‹‚ß‚é
+ì¬“úF6ŒŽ21“ú
+ì¬ŽÒF¬“cC”V
+
+
+select seq as prime
+from sequence as devidend
+where seq > 1
+and not exists
+	(select *
+	from sequence as devisor
+	where devisor.seq <= devidend.seq / 2
+	and devisor.seq <> 1
+	and mod(devidend.seq ,devisor.seq) = 0
+	)
+order by prime
+;
