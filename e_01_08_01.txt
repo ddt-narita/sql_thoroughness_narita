@@ -1,0 +1,23 @@
+演習01-08-01
+疑似配列テーブルを列もちテーブルに直したテーブルからオール1のエンティティを選択する
+作成日：6月21日
+作成者：成田修之
+
+select distinct at1.key
+from arraytbl2 as at1
+where not exists
+	(select at2.key
+	from arraytbl2 as at2
+	where at2.key = at1.key
+ 	and (at2.val <> 1 or at2.val is null)
+	)
+group by at1.key
+;
+
+ key
+-----
+ C
+
+サブクエリ部分で条件にat2.val <> 1だけであるとA列はすべてNULLであり、
+サブクエリが行を返さないので、not existsがtrueを返してしまうので
+上のようにNULLについての条件を付け足さなければいけない
