@@ -1,0 +1,16 @@
+‰‰K01-07-02
+·W‡‚ÅŠÖŒWœZ‚ğ•\Œ»‚·‚é‚Ås‚Á‚½œZ‚ğŒ¸Z‚ÉŠÒŒ³‚µ‚Ä‰ğ‚­•û–@‚ğuŒµ–§‚ÈœZv‚·‚é‚æ‚¤‚ÉC³
+ì¬“úF6Œ21“ú
+ì¬ÒF¬“cC”V
+
+select emp1.emp
+from empskills as emp1 left outer join skills as s
+on emp1.skill = s.skill
+group by emp1.emp
+having count(emp1.skill) = (select count(skill) from skills)
+and count (s.skill) = (select count(skill) from skills)
+;
+
+ emp
+------
+ _è
