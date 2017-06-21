@@ -32,7 +32,6 @@ select
 	SUM(case pref_name when '香川' then population else 0 end) AS 香川,
 	SUM(case pref_name when '愛媛' then population else 0 end) AS 愛媛,
 	SUM(case pref_name when '高知' then population else 0 end) AS 高知,
-	
 	SUM(case pref_name 	when '香川' then population
 				when '徳島' then population
 				when '愛媛' then population
@@ -49,3 +48,12 @@ group by
  女   | 845 |   40 |  100 |   50 |  100 |          290
  男   | 855 |   60 |  100 |  100 |  100 |          360
 
+解説を読んで
+SUM(case pref_name 	when '香川' then population
+				when '徳島' then population
+				when '愛媛' then population
+				when '高知' then population
+				else 0 end ) AS 四国（再掲）
+の部分は
+SUM(case pref_name IN('徳島','愛媛','高知','香川') then population else 0 end) AS 四国
+のほうがコードが見やすく、少ないためミスの可能性も低くいいコードになる
