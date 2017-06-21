@@ -1,0 +1,22 @@
+演習01-09-01
+欠番をすべてもとめる文をNOT EXISTS、外部結合を使う方法でそれぞれ書き直す
+作成日：6月21日
+作成者：成田修之
+
+not exists ver.
+
+select s1.seq 
+from sequence as s1
+where s1.seq between 1 and 12
+and not exists
+	(select st.seq from seqtbl st
+	 where s1.seq = st.seq)
+;
+
+外部結合ver.
+select s1.seq
+from sequence as s1 left outer join seqtbl as st
+on s1.seq = st.seq
+where st.seq is null
+and s1.seq between 1 and 12
+;
