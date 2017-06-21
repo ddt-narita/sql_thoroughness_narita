@@ -1,0 +1,64 @@
+‰‰K01-09-02
+ƒV[ƒPƒ“ƒX‚ğNOT EXISTS‚É‚æ‚é‘SÌ—Ê‰»‚Í‚È‚­HAVING‹å‚Å‘‚«Š·‚¦‚é
+ì¬“úF6Œ21“ú
+ì¬ÒF¬“cC”V
+
+Ü‚è•Ô‚µ‚È‚µ ver.
+
+select s1.seat as start, '`' as ‹æŠÔ , s2.seat as end
+from seats as s1, seats as s2
+where s2.seat = s1.seat + (3 - 1)
+group by s1.seat,s2.seat
+having (select count(*) from seats s3
+		where s3.seat between s1.seat and s2.seat
+		and s3.status = '‹ó') = 3
+order by start
+;
+
+ start | ‹æŠÔ | end
+-------+------+-----
+     3 | `   |   5
+     7 | `   |   9
+     8 | `   |  10
+     9 | `   |  11
+
+‰ğàver.
+select s1.seat as start, '`' as ‹æŠÔ , s2.seat as end
+from seats as s1, seats as s2, seats as s3
+where s2.seat = s1.seat + (3 - 1)
+and s3.seat between s1.seat and s2.seat
+group by s1.seat,s2.seat
+having count(*) = sum(case when s3.status = '‹ó' then 1 else 0 end)
+order by start
+;
+
+
+
+Ü‚è•Ô‚µ‚ ‚èver.
+select s1.seat as start, '`' as ‹æŠÔ , s2.seat as end
+from seats2 as s1, seats2 as s2
+where s2.seat = s1.seat + (3 - 1)
+group by s1.seat,s2.seat
+having (select count(*) from seats2 s3
+		where s3.seat between s1.seat and s2.seat
+		and s3.status = '‹ó'
+		and s3.row_id = s1.row_id) = 3
+
+order by start
+;
+
+ start | ‹æŠÔ | end
+-------+------+-----
+     3 | `   |   5
+     8 | `   |  10
+    11 | `   |  13
+
+‰ğàver.
+select s1.seat as start, '`' as ‹æŠÔ , s2.seat as end
+from seats2 as s1, seats2 as s2, seats2 as s3
+where s2.seat = s1.seat + (3 - 1)
+and s3.seat between s1.seat and s2.seat
+group by s1.seat,s2.seat
+having count(*) = sum(case when s3.status = '‹ó' and s3.row_id = s1.row_id then 1 else 0 end)
+order by start
+;
