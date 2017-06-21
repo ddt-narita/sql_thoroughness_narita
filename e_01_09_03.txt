@@ -1,0 +1,22 @@
+演習01-09-03
+最大何人座れるかでNOT EXISTSを使って求めたシーケンスをHAVING句で書き換える
+作成日：6月21日
+作成者：成田修之
+
+select s1.seat as start, s2.seat as end, s2.seat - s1.seat + 1 as seat_cnt
+from seats3 as s1, seats3 as s2, seats3 as s3
+where s1.seat <= s2.seat
+and s3.seat between s1.seat - 1 and s2.seat + 1
+group by s1.seat, s2.seat
+having count(*) = sum(case when (s3.seat between s1.seat and s2.seat and s3.status = '空') then 1
+			   when (s3.seat = s2.seat + 1 and s3.status = '占') then 1
+			   when (s3.seat = s1.seat - 1 and s3.status = '占') then 1 
+			   else 0 end)
+;
+
+
+ start | end | seat_cnt
+-------+-----+----------
+     2 |   5 |        4
+     7 |   7 |        1
+     9 |  10 |        2
