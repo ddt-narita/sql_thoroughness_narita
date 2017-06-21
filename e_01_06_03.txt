@@ -1,0 +1,76 @@
+演習01-06-03
+移動累計と移動平均のSUM関数をMAX,MIN,AVGに変えたケースについて検証
+作成日：6月21日
+作成者：成田修之
+
+select prc_date ,a1.prc_amt,
+	(select sum(prc_amt)
+	 from accounts A2
+	 where a1.prc_date >= a2.prc_date) as onhand_max
+from accounts a1
+order by prc_date
+;
+
+  prc_date  | prc_amt | onhand_sum
+------------+---------+------------
+ 2006-10-26 |   12000 |      12000
+ 2006-10-28 |    2500 |      14500
+ 2006-10-31 |  -15000 |       -500
+ 2006-11-03 |   34000 |      33500
+ 2006-11-04 |   -5000 |      28500
+ 2006-11-06 |    7200 |      35700
+ 2006-11-11 |   11000 |      46700
+
+select prc_date ,a1.prc_amt,
+	(select max(prc_amt)
+	 from accounts A2
+	 where a1.prc_date >= a2.prc_date) as onhand_max
+from accounts a1
+order by prc_date
+;
+
+  prc_date  | prc_amt | onhand_max
+------------+---------+------------
+ 2006-10-26 |   12000 |      12000
+ 2006-10-28 |    2500 |      12000
+ 2006-10-31 |  -15000 |      12000
+ 2006-11-03 |   34000 |      34000
+ 2006-11-04 |   -5000 |      34000
+ 2006-11-06 |    7200 |      34000
+ 2006-11-11 |   11000 |      34000
+
+select prc_date ,a1.prc_amt,
+	(select min(prc_amt)
+	 from accounts A2
+	 where a1.prc_date >= a2.prc_date) as onhand_max
+from accounts a1
+order by prc_date
+;
+
+  prc_date  | prc_amt | onhand_max
+------------+---------+------------
+ 2006-10-26 |   12000 |      12000
+ 2006-10-28 |    2500 |       2500
+ 2006-10-31 |  -15000 |     -15000
+ 2006-11-03 |   34000 |     -15000
+ 2006-11-04 |   -5000 |     -15000
+ 2006-11-06 |    7200 |     -15000
+ 2006-11-11 |   11000 |     -15000
+
+select prc_date ,a1.prc_amt,
+	(select avg(prc_amt)
+	 from accounts A2
+	 where a1.prc_date >= a2.prc_date) as onhand_max
+from accounts a1
+order by prc_date
+;
+
+  prc_date  | prc_amt |       onhand_max
+------------+---------+------------------------
+ 2006-10-26 |   12000 | 12000.0000000000000000
+ 2006-10-28 |    2500 |  7250.0000000000000000
+ 2006-10-31 |  -15000 |  -166.6666666666666667
+ 2006-11-03 |   34000 |  8375.0000000000000000
+ 2006-11-04 |   -5000 |  5700.0000000000000000
+ 2006-11-06 |    7200 |  5950.0000000000000000
+ 2006-11-11 |   11000 |  6671.4285714285714286
