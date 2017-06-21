@@ -1,0 +1,17 @@
+演習01-07-01
+テーブルの等値性をチェックする際に行数の事前準備が必要ないように改善
+作成日：6月21日
+作成者：成田修之
+
+select 
+case when count(*) = 
+	  (select count(*) from 
+		(select * from tbl_a union select * from tbl_b) as tmp) then '同値'
+     else '同値ではありません' end
+from tbl_a
+;
+
+
+ case
+------
+ 同値
