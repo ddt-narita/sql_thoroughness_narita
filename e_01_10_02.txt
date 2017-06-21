@@ -1,0 +1,28 @@
+‰‰K01-10-02
+existspŒê‚Ìg‚¢•û‚Å‚ÌŠw¶‚ğ‘I‘ğ‚·‚éƒNƒGƒŠ‚ğ
+pŒê˜_“I”­‘z‚É‚æ‚Á‚Ä‹‚ß‚½‚Ì‚ğHAVING‚ğg‚Á‚Ä‘‚«Š·‚¦
+ì¬“úF6Œ21“ú
+ì¬ÒF¬“cC”V
+
+select student_id
+from testscores
+group by student_id
+having 2 = sum(case when subject = 'Z”' and score >= 80 then 1
+		 when subject = '‘Œê' and score >= 50 then 1
+		else 0 end)
+;
+
+ student_id
+------------
+        200
+        100
+
+‰ğà‚Å‚ÍZ”‚Æ‘Œê‚ğŠÜ‚Ü‚È‚¢‚à‚Ì‚ÉŠÖ‚µ‚Ä‚Í”rœ‚µ‚½‚¤‚¦‚Ås‚Á‚Ä‚¢‚½B
+select student_id
+from testscores
+where subject IN ('Z”','‘Œê')
+group by student_id
+having sum(case when subject = 'Z”' and score >= 80 then 1
+		when subject = '‘Œê' and score >= 50 then 1
+		else 0 end) = 2
+;
